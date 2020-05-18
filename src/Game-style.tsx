@@ -27,75 +27,68 @@ export const WordContainer = styled.div`
 `;
 
 export const TimerContainer = styled.div`
-width: 90%;
-height: 40px;
+  width: 90%;
+  height: 40px;
 
-font-size: 24px;
-margin-bottom: 16px;
+  font-size: 24px;
+  margin-bottom: 16px;
 
-align-self: right;
+  align-self: right;
 
-display:flex;
-justify-content:flex-end;
-
+  display: flex;
+  justify-content: space-between;
 `;
 
-export const ProgressBarContainer =  styled.div`
+export const ProgressBarContainer = styled.div`
+  width: 50%;
+  height: 40px;
 
-width: 50%;
-height: 40px;
+  color: white;
 
-color: white;
-
-background-color: #3f3f44;
-
+  background-color: #3f3f44;
 `;
 
-export const ProgressBar =  styled.div<{progress: number}>`
+export const ProgressBar = styled.div<{ progress: number }>`
+  width: calc(${(p) => p.progress} * 100%);
+  height: 40px;
 
-width: calc( ${p => p.progress} * 100%);
-height: 40px;
-
-
-background-color: #f40552;
-
+  background-color: #f40552;
 `;
-
 
 export const StartButton = styled.div`
-width: 120px;
-height: 60px;
+  width: 120px;
+  height: 60px;
 
-border-radius: 8px;
-background: #21d16c;
+  border-radius: 8px;
+  background: #21d16c;
 
-color: white;
-font-size: 28px;
-font-weight:bold;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-cursor: pointer;
+  cursor: pointer;
 
-position:absolute; 
-top : 40%;
-margin-top: -30px;
-left: 50%;
-margin-left: -60px;
+  position: absolute;
+  top: 40%;
+  margin-top: -30px;
+  left: 50%;
+  margin-left: -60px;
 
-z-index: 5;
-
+  z-index: 5;
 `;
 
 export const TransparentBackground = styled.div`
-width: 100%;
-height: 500px;
-background-color: #00000099;
+  width: 100%;
+  height: 500px;
+  background-color: #00000099;
 
-position: absolute;
+  position: absolute;
+`;
 
-
-
+export const Points = styled.div`
+  font-weight: 600;
 `;

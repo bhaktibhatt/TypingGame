@@ -4,6 +4,7 @@ import Key from "./Key";
 
 interface Props {
   handlePressedChar: (char: string) => void;
+  startPressEvent: boolean;
 }
 
 interface State {
@@ -12,7 +13,7 @@ interface State {
 
 export default class Keyboard extends React.Component<Props, State> {
   public state: State = {
-    pressedChar: new Set()
+    pressedChar: new Set(),
   };
 
   handleKeyPress = (e: KeyboardEvent) => {
@@ -26,32 +27,40 @@ export default class Keyboard extends React.Component<Props, State> {
     const newSet = new Set<string>(this.state.pressedChar);
     newSet.delete(e.key);
     this.setState({
-      pressedChar: newSet
+      pressedChar: newSet,
     });
   };
 
-  componentDidMount() {
-    window.addEventListener("keypress", e => this.handleKeyPress(e));
-    window.addEventListener("keyup", e => this.handleKeyUp(e));
+  componentDidUpdate = (prevProps: Props) => {
+    if (prevProps.startPressEvent !== this.props.startPressEvent) {
+      this.addListeners();
+    }
+  };
+
+  addListeners() {
+    window.addEventListener("keypress", (e) => this.handleKeyPress(e));
+    window.addEventListener("keyup", (e) => this.handleKeyUp(e));
   }
 
+  removeListeners() {}
+
   componentWillUnmount() {
-    window.removeEventListener("keypress", e => this.handleKeyPress(e));
-    window.addEventListener("keyup", e => this.handleKeyUp(e));
+    window.removeEventListener("keypress", (e) => this.handleKeyPress(e));
+    window.addEventListener("keyup", (e) => this.handleKeyUp(e));
   }
 
   render() {
     const characters: string[][] = [
       ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
       ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"],
-      ["z", "x", "c", "v", "b", "n", "m", ",", "."]
+      ["z", "x", "c", "v", "b", "n", "m", ",", "."],
     ];
     return (
       <KeyboardContainer>
         {characters.map((characterList, i) => {
           return (
             <KeyboardRow key={characterList[0]} row={i}>
-              {characterList.map(character => {
+              {characterList.map((character) => {
                 return (
                   <Key
                     pressedChars={this.state.pressedChar}

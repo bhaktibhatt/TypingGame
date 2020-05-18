@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default class Word extends React.Component<Props> {
-
   render() {
     const { children, pressedLetters } = this.props;
 
@@ -19,10 +18,17 @@ export default class Word extends React.Component<Props> {
         <div style={{ display: "flex" }}>
           {letterArray?.map((letter, key) => {
             return (
-              <div key={key} style={{fontWeight:"bold",color: letter.isPressed ? "red" : "black" }}>{letter.letter}</div>
-            )
-            }
-          )}
+              <div
+                key={key}
+                style={{
+                  fontWeight: "bold",
+                  color: letter.isPressed ? "red" : "black",
+                }}
+              >
+                {letter.letter}
+              </div>
+            );
+          })}
         </div>
       </div>
     );
