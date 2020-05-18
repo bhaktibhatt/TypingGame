@@ -25,6 +25,7 @@ interface State {
   showStart: boolean;
   points: number;
   isGamePlaying: boolean;
+  setShake: boolean;
 }
 
 export default class Game extends React.Component<Props, State> {
@@ -36,6 +37,7 @@ export default class Game extends React.Component<Props, State> {
     showStart: true,
     points: 0,
     isGamePlaying: false,
+    setShake: false,
   };
 
   public timer: number | undefined = undefined;
@@ -61,8 +63,13 @@ export default class Game extends React.Component<Props, State> {
     );
 
     if (char !== nextLetter) {
+      this.setState({ setShake: true }, () =>
+        setTimeout(() => this.setState({ setShake: false }), 50)
+      );
       return;
     }
+
+    this.setState({ setShake: false });
     if (pressedLetters.length === curWord.length - 1) {
       // add point
       this.updateWord();
@@ -114,7 +121,7 @@ export default class Game extends React.Component<Props, State> {
       currentTime,
       showStart,
       points,
-      isGamePlaying,
+      setShake,
     } = this.state;
 
     if (currentTime >= 60) {
@@ -138,7 +145,10 @@ export default class Game extends React.Component<Props, State> {
             </ProgressBarContainer>
           </TimerContainer>
           <WordContainer>
-            <Word pressedLetters={this.state.pressedLetters}>
+            <Word
+              setShake={setShake}
+              pressedLetters={this.state.pressedLetters}
+            >
               {words[currentWord]}
             </Word>
           </WordContainer>
