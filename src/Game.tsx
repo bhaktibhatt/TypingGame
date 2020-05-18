@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GameContainer, WordContainer, TimerContainer, ProgressBar, ProgressBarContainer } from "./Game-style";
+import { GameContainer, WordContainer, TimerContainer, ProgressBar, ProgressBarContainer, StartButton, DadContainer, TransparentBackground } from "./Game-style";
 import Keyboard from "./components/Keyboard";
 import Word from "./components/Word";
 
@@ -12,6 +12,7 @@ interface State {
   readonly currentWord: number;
    currentTime: number;
    startTime : number;
+   showStart: boolean;
 
 }
 
@@ -20,7 +21,8 @@ export default class Game extends React.Component<Props, State> {
     pressedLetters: "",
     currentWord: Math.floor(Math.random() * this.props.words.length),
     currentTime: 0,
-    startTime: 0
+    startTime: 0,
+    showStart: true
   };
 
   public timer : number | undefined = undefined;
@@ -61,15 +63,22 @@ export default class Game extends React.Component<Props, State> {
       startTime: Date.now() - this.state.currentTime
     })
 
-    this.timer = setInterval(() => this.setState({currentTime: this.state.currentTime + 1}), 1000);
+    if (this.timer === undefined) {
+      this.timer = setInterval(() => this.setState({currentTime: this.state.currentTime + 1}), 1000);
+    }
   }
 
   public endTimer = () => {
     clearInterval(this.timer);
   }
 
-  componentDidMount = () => {
+  public startGame = () => {
+    this.setState({showStart: false}, () => this.forceUpdate());
+    
     this.startTimer();
+  }
+
+  componentDidMount = () => {
   }
 
   componentDidUnmount = () => {
@@ -80,15 +89,22 @@ export default class Game extends React.Component<Props, State> {
 
   render() {
     const { words } = this.props;
-    const { currentWord, currentTime } = this.state;
+    const { currentWord, currentTime, showStart } = this.state;
 
     if (currentTime >= 60) {
       this.endTimer();
     }
-    
+
     return (
+      <DadContainer>
+        {showStart && (<><StartButton onClick={() => this.startGame()}>
+          Start
+        </StartButton><TransparentBackground/></>)}
+
       <GameContainer>
         <TimerContainer >
+
+      
       <ProgressBarContainer>
       <ProgressBar progress={currentTime / 60}>
           45
@@ -105,6 +121,7 @@ export default class Game extends React.Component<Props, State> {
         </WordContainer>
         <Keyboard handlePressedChar={this.handlePressedChar} />
       </GameContainer>
+      </DadContainer>
     );
   }
 }
