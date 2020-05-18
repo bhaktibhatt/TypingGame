@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GameContainer, WordContainer } from "./Game-style";
+import { GameContainer, WordContainer, TimerContainer, ProgressBar, ProgressBarContainer } from "./Game-style";
 import Keyboard from "./components/Keyboard";
 import Word from "./components/Word";
 
@@ -10,13 +10,20 @@ interface Props {
 interface State {
   readonly pressedLetters: string;
   readonly currentWord: number;
+   currentTime: number;
+   startTime : number;
+
 }
 
 export default class Game extends React.Component<Props, State> {
   public state: State = {
     pressedLetters: "",
-    currentWord: Math.floor(Math.random() * this.props.words.length)  
+    currentWord: Math.floor(Math.random() * this.props.words.length),
+    currentTime: 0,
+    startTime: 0
   };
+
+  public timer : number | undefined = undefined;
 
   private shuffleWord = () => {
     const { words } = this.props;
@@ -48,12 +55,49 @@ export default class Game extends React.Component<Props, State> {
     }
   };
 
+  public startTimer = () => {
+    this.setState({
+      currentTime: this.state.currentTime,
+      startTime: Date.now() - this.state.currentTime
+    })
+
+    this.timer = setInterval(() => this.setState({currentTime: this.state.currentTime + 1}), 1000);
+  }
+
+  public endTimer = () => {
+    clearInterval(this.timer);
+  }
+
+  componentDidMount = () => {
+    this.startTimer();
+  }
+
+  componentDidUnmount = () => {
+    this.endTimer();
+  }
+
+  
+
   render() {
     const { words } = this.props;
-    const { currentWord } = this.state;
+    const { currentWord, currentTime } = this.state;
 
+    if (currentTime >= 60) {
+      this.endTimer();
+    }
+    
     return (
       <GameContainer>
+        <TimerContainer >
+      <ProgressBarContainer>
+      <ProgressBar progress={currentTime / 60}>
+          45
+          </ProgressBar>
+
+      </ProgressBarContainer>
+          
+          
+        </TimerContainer>
         <WordContainer>
           <Word pressedLetters={this.state.pressedLetters}>
             {words[currentWord]}
