@@ -6,18 +6,6 @@ interface Props {
 }
 
 export default class Word extends React.Component<Props> {
-  checkLetter(key: number, letter: string, letterArray: string[]) {
-    // const {pressedLetters, updatePressedLetters} = this.props;
-
-    return true;
-    // if ((pressedLetters.substr(-1) === letterArray[pointer]) && pointer === key) {
-    //   // this.setState(prevState => { return {pointer: prevState.pointer + 1}});
-    //   return true;
-    // } else {
-    //   updatePressedLetters(pressedLetters);
-    //   return false;
-    // }
-  }
 
   render() {
     const { children, pressedLetters } = this.props;
@@ -25,8 +13,6 @@ export default class Word extends React.Component<Props> {
     const letterArray = children.split("").map((letter, i) => {
       return { letter, isPressed: i < pressedLetters.length };
     });
-
-    console.log(letterArray);
 
     return (
       <div>

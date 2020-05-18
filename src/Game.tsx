@@ -15,7 +15,7 @@ interface State {
 export default class Game extends React.Component<Props, State> {
   public state: State = {
     pressedLetters: "",
-    currentWord: 0
+    currentWord: Math.floor(Math.random() * this.props.words.length)  
   };
 
   private shuffleWord = () => {
@@ -28,7 +28,6 @@ export default class Game extends React.Component<Props, State> {
   };
 
   private handlePressedChar = (char: string) => {
-    // this.setState({ pressedLetters: char });'
     const { words } = this.props;
     const { pressedLetters, currentWord } = this.state;
 
@@ -38,10 +37,11 @@ export default class Game extends React.Component<Props, State> {
       pressedLetters.length,
       pressedLetters.length + 1
     );
+
     if (char !== nextLetter) {
       return;
     }
-    if (this.state.pressedLetters.length === curWord.length - 1) {
+    if (pressedLetters.length === curWord.length - 1) {
       this.shuffleWord();
     } else {
       this.setState({ pressedLetters: this.state.pressedLetters + nextLetter });
