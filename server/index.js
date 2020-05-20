@@ -65,7 +65,7 @@ const removeUserFromGame = (userID) => {
 };
 
 const emitGameState = (socket) => {
-  socket.broadcast.emit("stateChange", gameState);
+  io.emit("stateChange", gameState);
 };
 
 // UserState {

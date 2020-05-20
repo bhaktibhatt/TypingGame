@@ -158,7 +158,7 @@ export default class Game extends React.Component<Props, State> {
       pressedChar,
     } = this.state;
     const { playerState, isPlayer } = this.props;
-    const { currentWord, score } = playerState;
+    const { currentWord, score, index } = playerState;
 
     if (!isPlayer) {
       pressedChar = new Set();
@@ -188,10 +188,7 @@ export default class Game extends React.Component<Props, State> {
             </ProgressBarContainer>
           </TimerContainer>
           <WordContainer>
-            <Word
-              setShake={setShake}
-              pressedLetters={this.state.pressedLetters}
-            >
+            <Word setShake={setShake} pressedLetters={index}>
               {currentWord}
             </Word>
           </WordContainer>

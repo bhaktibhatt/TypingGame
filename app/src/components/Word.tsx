@@ -2,7 +2,7 @@ import * as React from "react";
 import { WordContainer } from "./Word-style";
 
 interface Props {
-  readonly pressedLetters: string;
+  readonly pressedLetters: number;
   readonly children: string;
   readonly setShake: boolean;
 }
@@ -12,7 +12,7 @@ export default class Word extends React.Component<Props> {
     const { children, pressedLetters, setShake } = this.props;
 
     const letterArray = children.split("").map((letter, i) => {
-      return { letter, isPressed: i < pressedLetters.length };
+      return { letter, isPressed: i < pressedLetters };
     });
 
     return (
