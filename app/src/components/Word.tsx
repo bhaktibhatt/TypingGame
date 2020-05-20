@@ -22,18 +22,22 @@ export default class Word extends React.Component<Props> {
           style={{ display: "flex" }}
         >
           {letterArray?.map((letter, key) => {
-            return (
-              <div
-                key={key}
-                style={{
-                  fontWeight: "bold",
-                  color: letter.isPressed ? "#79d70f" : "black",
-                  // textDecoration: letter.isPressed ? "line-through" : "none",
-                }}
-              >
-                {letter.letter}
-              </div>
-            );
+            if (letter.letter === " ") {
+              return <div style={{ marginRight: 12 }}></div>;
+            } else {
+              return (
+                <div
+                  key={key}
+                  style={{
+                    fontWeight: "bold",
+                    color: letter.isPressed ? "#79d70f" : "black",
+                    // textDecoration: letter.isPressed ? "line-through" : "none",
+                  }}
+                >
+                  {letter.letter}
+                </div>
+              );
+            }
           })}
         </WordContainer>
       </div>
