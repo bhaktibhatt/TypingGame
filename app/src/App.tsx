@@ -16,26 +16,6 @@ import { UserState } from "./UserState";
 
 const ENDPOINT = "http://localhost:4000";
 
-function getWordList(): string[] {
-  return readTextFile("/assets/1000.txt");
-}
-
-function readTextFile(file: string): string[] {
-  var rawFile = new XMLHttpRequest();
-  var words: string[] = [];
-  rawFile.open("GET", file, false);
-  rawFile.onreadystatechange = () => {
-    if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status === 0) {
-        var allText = rawFile.responseText;
-        words = allText.split(/\r?\n/);
-      }
-    }
-  };
-  rawFile.send(null);
-  return words;
-}
-
 type GameState = UserState[];
 
 export default function App() {
@@ -47,7 +27,6 @@ export default function App() {
   useEffect(() => {
     socket.on("stateChange", (state: GameState) => {
       setGameState(state);
-      console.log(state);
     });
   }, []);
 
@@ -56,9 +35,22 @@ export default function App() {
       setRoomID(data.roomID);
       setUserID(data.userID);
       socket.emit("joined");
-      console.log("Got user id", data.userID);
     });
   }, []);
+
+  useEffect(() => {
+    socket.on("clear", (userID: string, serverGameState: GameState) => {
+      console.log("server", serverGameState);
+      if (serverGameState !== undefined) {
+        const userIndex = serverGameState.findIndex((u) => u.userID === userID);
+        if (userIndex === -1) return;
+        serverGameState[userIndex].index = 0;
+        serverGameState[userIndex].pressed = "";
+      } else {
+        console.log("undefined game state");
+      }
+    });
+  });
 
   if (roomID === "" || gameState === undefined || gameState.length === 0) {
     return <div className="App">Connecting</div>;

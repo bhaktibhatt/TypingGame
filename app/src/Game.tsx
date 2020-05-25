@@ -83,10 +83,9 @@ export default class Game extends React.Component<Props, State> {
     const { pressedLetters, pressedChar } = this.state;
     const index = pressedLetters.length;
 
-    this.props.sendUpdate(
-      index,
-      Array.from(pressedChar).reduce((pv, nv) => pv + nv, "")
-    );
+    const pressed = Array.from(pressedChar).reduce((pv, nv) => pv + nv, "");
+
+    this.props.sendUpdate(index, pressed);
   };
 
   private handlePressedChar = (char: string) => {
@@ -164,8 +163,6 @@ export default class Game extends React.Component<Props, State> {
       pressedChar = new Set();
       playerState.pressed.split("").forEach((l) => pressedChar.add(l));
     }
-
-    console.log(playerState.userID, pressedChar);
 
     if (currentTime >= 60) {
       this.endTimer();
