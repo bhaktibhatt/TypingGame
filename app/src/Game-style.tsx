@@ -83,7 +83,7 @@ export const StartButton = styled.div`
 
 export const TransparentBackground = styled.div`
   width: 100%;
-  height: 500px;
+  height: 100vh;
   background-color: #00000099;
 
   position: absolute;
@@ -91,4 +91,48 @@ export const TransparentBackground = styled.div`
 
 export const Points = styled.div`
   font-weight: 600;
+`;
+
+export const GameOverScreen = styled.div`
+  width: 500px;
+  height: fit-content;
+
+  padding: 16px;
+
+  background-color: white;
+
+  position: absolute;
+
+  z-index: 5;
+
+  /* TODO: get it to be center each time */
+  /* top: 50%;
+  left: calc(50% - 250px); */
+
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  border-radius: 8px;
+  box-shadow: 8px 8px 10px 1px rgba(0, 0, 0, 0.1);
+`;
+
+export const GameOverHeader = styled.div`
+  font-size: 36px;
+`;
+
+export const GameOverScore = styled.div`
+  font-size: 24px;
+
+  margin: 4px 48px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const PlayerName = styled.div`
+  font-weight: bold;
 `;

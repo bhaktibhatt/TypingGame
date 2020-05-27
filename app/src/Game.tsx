@@ -9,6 +9,10 @@ import {
   DadContainer,
   TransparentBackground,
   Points,
+  GameOverScreen,
+  GameOverHeader,
+  GameOverScore,
+  PlayerName,
 } from "./Game-style";
 import Keyboard from "./components/Keyboard";
 import Word from "./components/Word";
@@ -27,6 +31,7 @@ interface State {
   readonly showStart: boolean;
   readonly points: number;
   readonly isGamePlaying: boolean;
+  readonly isGameOver: boolean;
   readonly setShake: boolean;
 
   pressedChar: Set<string>;
@@ -41,6 +46,7 @@ export default class Game extends React.Component<Props, State> {
     points: 0,
     isGamePlaying: false,
     setShake: false,
+    isGameOver: false,
     pressedChar: new Set(),
   };
 
@@ -70,12 +76,12 @@ export default class Game extends React.Component<Props, State> {
 
   componentDidUpdate = (prevProps: Props, prevState: State) => {
     const { index } = this.props.playerState;
-    console.log("-----start-----");
+    // console.log("-----start-----");
 
-    console.log("prevIndex", prevProps.playerState.index);
+    // console.log("prevIndex", prevProps.playerState.index);
 
-    console.log("index", index);
-    console.log("-----end-----");
+    // console.log("index", index);
+    // console.log("-----end-----");
 
     if (prevProps.playerState.index !== index && index === 0) {
       this.setState(
@@ -84,6 +90,13 @@ export default class Game extends React.Component<Props, State> {
         },
         () => this.forceUpdate()
       );
+    }
+
+    if (
+      prevState.currentTime !== this.state.currentTime &&
+      this.state.currentTime >= 60
+    ) {
+      this.endTimer();
     }
   };
 
@@ -102,9 +115,6 @@ export default class Game extends React.Component<Props, State> {
     const { pressedLetters, pressedChar } = this.state;
     const { index } = this.props.playerState;
     let retIndex = pressedLetters.length;
-
-    console.log("index in send update", retIndex);
-    console.log("pressed letters", pressedLetters);
 
     const pressed = Array.from(pressedChar).reduce((pv, nv) => pv + nv, "");
 
@@ -152,8 +162,7 @@ export default class Game extends React.Component<Props, State> {
 
   private endTimer = () => {
     clearInterval(this.timer);
-
-    // this.setState({ isGamePlaying: false });
+    this.setState({ isGameOver: true });
   };
 
   private startGame = () => {
@@ -178,18 +187,14 @@ export default class Game extends React.Component<Props, State> {
       setShake,
       pressedLetters,
       pressedChar,
+      isGameOver,
     } = this.state;
     const { playerState, isPlayer } = this.props;
     const { currentWord, score, index } = playerState;
 
-    console.log("game", index);
     if (!isPlayer) {
       pressedChar = new Set();
       playerState.pressed.split("").forEach((l) => pressedChar.add(l));
-    }
-
-    if (currentTime >= 60) {
-      this.endTimer();
     }
 
     return (
@@ -201,22 +206,35 @@ export default class Game extends React.Component<Props, State> {
           </>
         )}
 
-        <GameContainer>
-          <TimerContainer>
-            <Points>
-              Points: {score} || {playerState.userID}
-            </Points>
-            <ProgressBarContainer>
-              <ProgressBar progress={currentTime / 60}></ProgressBar>
-            </ProgressBarContainer>
-          </TimerContainer>
-          <WordContainer>
-            <Word setShake={setShake} pressedLetters={index}>
-              {currentWord}
-            </Word>
-          </WordContainer>
-          <Keyboard startPressEvent={!showStart} pressedChar={pressedChar} />
-        </GameContainer>
+        {isGameOver ? (
+          <>
+            <GameOverScreen>
+              <GameOverHeader>Scores</GameOverHeader>
+              <GameOverScore>
+                <PlayerName>{playerState.userID}</PlayerName>
+                <div>{score}</div>
+              </GameOverScore>
+            </GameOverScreen>
+            <TransparentBackground />
+          </>
+        ) : (
+          <GameContainer>
+            <TimerContainer>
+              <Points>
+                Points: {score} || {playerState.userID}
+              </Points>
+              <ProgressBarContainer>
+                <ProgressBar progress={currentTime / 60}></ProgressBar>
+              </ProgressBarContainer>
+            </TimerContainer>
+            <WordContainer>
+              <Word setShake={setShake} pressedLetters={index}>
+                {currentWord}
+              </Word>
+            </WordContainer>
+            <Keyboard startPressEvent={!showStart} pressedChar={pressedChar} />
+          </GameContainer>
+        )}
       </DadContainer>
     );
   }
