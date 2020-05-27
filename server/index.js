@@ -36,8 +36,7 @@ const updateGameState = (userID, index, pressed, socket) => {
 
   if (index === gameState[userIndex].currentWord.length) {
     updateWord(userID, pressed);
-    console.log("gamestate", gameState);
-    io.emit("clear", { user: userID, serverGameState: gameState });
+    io.emit("nutlope", { userID, serverGameState: gameState });
   } else {
     gameState[userIndex] = {
       ...gameState[userIndex],

@@ -39,18 +39,34 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    socket.on("clear", (userID: string, serverGameState: GameState) => {
-      console.log("server", serverGameState);
-      if (serverGameState !== undefined) {
-        const userIndex = serverGameState.findIndex((u) => u.userID === userID);
-        if (userIndex === -1) return;
-        serverGameState[userIndex].index = 0;
-        serverGameState[userIndex].pressed = "";
-      } else {
-        console.log("undefined game state");
+    socket.on(
+      "nutlope",
+      ({
+        userID,
+        serverGameState,
+      }: {
+        userID: string;
+        serverGameState: GameState;
+      }) => {
+        if (serverGameState !== undefined) {
+          const userIndex = serverGameState.findIndex(
+            (u) => u.userID === userID
+          );
+          if (userIndex === -1) return;
+          serverGameState[userIndex].index = 0;
+          serverGameState[userIndex].pressed = "";
+
+          console.log("Server State", serverGameState);
+          //setKeyPressed((previousState) => new Set(previousState).add(ev.key));
+          setGameState((prevState) => serverGameState);
+        } else {
+          console.log("undefined game state");
+        }
       }
-    });
-  });
+    );
+  }, []);
+
+  console.log("outside", gameState);
 
   if (roomID === "" || gameState === undefined || gameState.length === 0) {
     return <div className="App">Connecting</div>;

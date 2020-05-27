@@ -68,6 +68,25 @@ export default class Game extends React.Component<Props, State> {
     );
   };
 
+  componentDidUpdate = (prevProps: Props, prevState: State) => {
+    const { index } = this.props.playerState;
+    console.log("-----start-----");
+
+    console.log("prevIndex", prevProps.playerState.index);
+
+    console.log("index", index);
+    console.log("-----end-----");
+
+    if (prevProps.playerState.index !== index && index === 0) {
+      this.setState(
+        {
+          pressedLetters: "",
+        },
+        () => this.forceUpdate()
+      );
+    }
+  };
+
   componentDidMount = () => {
     if (this.props.isPlayer) {
       window.addEventListener("keypress", (e) => {
@@ -81,11 +100,15 @@ export default class Game extends React.Component<Props, State> {
 
   private sendUpdate = () => {
     const { pressedLetters, pressedChar } = this.state;
-    const index = pressedLetters.length;
+    const { index } = this.props.playerState;
+    let retIndex = pressedLetters.length;
+
+    console.log("index in send update", retIndex);
+    console.log("pressed letters", pressedLetters);
 
     const pressed = Array.from(pressedChar).reduce((pv, nv) => pv + nv, "");
 
-    this.props.sendUpdate(index, pressed);
+    this.props.sendUpdate(retIndex, pressed);
   };
 
   private handlePressedChar = (char: string) => {
@@ -159,6 +182,7 @@ export default class Game extends React.Component<Props, State> {
     const { playerState, isPlayer } = this.props;
     const { currentWord, score, index } = playerState;
 
+    console.log("game", index);
     if (!isPlayer) {
       pressedChar = new Set();
       playerState.pressed.split("").forEach((l) => pressedChar.add(l));
@@ -179,7 +203,9 @@ export default class Game extends React.Component<Props, State> {
 
         <GameContainer>
           <TimerContainer>
-            <Points>Points: {playerState.userID}</Points>
+            <Points>
+              Points: {score} || {playerState.userID}
+            </Points>
             <ProgressBarContainer>
               <ProgressBar progress={currentTime / 60}></ProgressBar>
             </ProgressBarContainer>
