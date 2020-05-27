@@ -117,6 +117,7 @@ const updateWord = (userID, pressed) => {
   gameState[userIndex] = {
     ...gameState[userIndex],
     currentWord,
+    score: gameState[userIndex].score + 1,
     index: 0,
     pressed,
   };
