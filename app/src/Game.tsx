@@ -194,7 +194,7 @@ export default class Game extends React.Component<Props, State> {
 
     return (
       <DadContainer>
-        {showStart && (
+        {showStart && isPlayer && (
           <>
             <StartButton onClick={() => this.startGame()}>Start</StartButton>
             <TransparentBackground />
